@@ -1,12 +1,10 @@
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-
 const app = express();
 const weatherRouter = require('./routes/weather.js');
 
-
-
-const allowlist = ['http://example1.com', ]
+const allowlist = ['https://claudi0-v.github.io/weather_app/']
 const corsOptionsDelegate =  (req, callback) => {
   let corsOptions;
   if (allowlist.indexOf(req.header('Origin')) !== -1) {
@@ -19,10 +17,9 @@ const corsOptionsDelegate =  (req, callback) => {
 
 app.use(cors(corsOptionsDelegate));
 
-require("dotenv").config();
-
 
 app.use(express.json());
+
 
 app.use("/weather", weatherRouter);
 
