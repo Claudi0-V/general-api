@@ -8,8 +8,7 @@ const wallpaperAPICall = async (description) => {
 			`https://api.pexels.com/v1/search?query=${weatherDescription}&per_page=2`,
 			{
 				headers: {
-					Authorization:
-						process.env.WALLPAPER_KEY,
+					Authorization: process.env.WALLPAPER_KEY,
 				},
 			}
 		);
@@ -33,7 +32,6 @@ const weatherAPICaller = async (search) => {
 			return finalData;
 		}
 	} catch (e) {
-		console.log(e);
 		return false;
 	}
 };
@@ -44,7 +42,6 @@ const processData = (data, wallpaper) => {
 	const { humidity, temp, temp_max, temp_min } = main;
 	const mainWeather = weather[0].main;
 	const country = data.sys.country;
-	console.log(country)
 
 	return {
 		wallpaper,
@@ -56,18 +53,20 @@ const processData = (data, wallpaper) => {
 		temp_max,
 		temp_min,
 		mainWeather,
-		country
+		country,
 	};
 };
 
 module.exports = async (req, res) => {
 	const { search } = req.query;
-	const queryResult = await weatherAPICaller(search);
-	const wallpaper = await wallpaperAPICall(queryResult.weather[0].description);
-	if (queryResult) {
+	try {
+		const queryResult = await weatherAPICaller(search);
+		const wallpaper = await wallpaperAPICall(
+		queryResult.weather[0].description
+		);
 		const data = processData(queryResult, wallpaper);
 		res.status(200).json({ data });
-	} else {
+	} catch (e) {
 		res.status(400).send({ data: false });
 	}
 };
