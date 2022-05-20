@@ -13,7 +13,7 @@ const wallpaperAPICall = async (description) => {
 			}
 		);
 		const images = await response.json();
-		return images.photos[0].src.large;
+		return images.photos[0].src.large2x;
 	} catch (err) {
 		return;
 	}
